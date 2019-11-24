@@ -1,11 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CardReaderAPI.Models
 {
-    public class Class
+    public class Entry: User
     {
+        public DateTime Time;
+
+        public Entry()
+        {
+
+        }
+
+        public Entry(string id, string name, string rank, DateTime time)
+        {
+            Id = id;
+            Name = name;
+            Rank = rank;
+            Time = time;
+        }
     }
 }
