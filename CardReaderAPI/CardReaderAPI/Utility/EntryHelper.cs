@@ -14,7 +14,7 @@ namespace CardReaderAPI.Utility
 
         }
 
-        public const string connectionString = @"Server=tcp:jsmbserver.database.windows.net,1433;Initial Catalog=jsmbDB;Persist Security Info=False;User ID=JSMB;Password=Zealand1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        public const string connectionString = @"Server=tcp:jsmbdbserver.database.windows.net,1433;Initial Catalog=jsmbDB;Persist Security Info=False;User ID=JSMB;Password=Zibat123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
         public IEnumerable<Entry> Get()
         {
             const string getall = @"Select * from Entry";
@@ -38,28 +38,26 @@ namespace CardReaderAPI.Utility
 
         public User GetUser(int id)
         {
-            User entry;
+            User entry = null;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                var idstring = @"select * from Entry where Id=@id";
+                var idstring = @"select * from Users where Id=@id";
                 using (SqlCommand cmd = new SqlCommand(idstring, connection))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        reader.Read();
-                        entry = ReadNextUser(reader);
+                        while(reader.Read()) entry = ReadNextUser(reader);
                     }
-
                 }
             }
             return entry;
         }
 
-        public Entry Get(int id)
+        public List<Entry> Get(int id)
         {
-            Entry entry;
+            List<Entry> list = new List<Entry>();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -67,15 +65,16 @@ namespace CardReaderAPI.Utility
                 using (SqlCommand cmd = new SqlCommand(idstring, connection))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
                     {
-                        reader.Read();
-                        entry = ReadNextEntry(reader);
+                        Entry entry = ReadNextEntry(reader);
+                        list.Add(entry);
                     }
-
+                    reader.Close();
                 }
             }
-            return entry;
+            return list;
         }
 
         public void Insert(Entry entry)
@@ -89,7 +88,7 @@ namespace CardReaderAPI.Utility
                     cmd.CommandText = "INSERT INTO dbo.Entry(Id, Name, Rank, Time) Values(@params1, @params2, @params3, @params4)";
                     cmd.Parameters.AddWithValue("@params1", entry.Id);
                     cmd.Parameters.AddWithValue("@params2", entry.Name);
-                    cmd.Parameters.AddWithValue("@params3", entry.Rank );
+                    cmd.Parameters.AddWithValue("@params3", entry.Rank);
                     cmd.Parameters.AddWithValue("@params4", entry.Time);
                     cmd.ExecuteNonQuery();
                 }
@@ -102,7 +101,6 @@ namespace CardReaderAPI.Utility
             user.Id = reader.GetInt32(0);
             user.Name = reader.GetString(1);
             user.Rank = reader.GetString(2);
-            user.Time = reader.GetDateTime(3);
             return user;
         }
 

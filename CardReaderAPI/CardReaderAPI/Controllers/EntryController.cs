@@ -9,7 +9,7 @@ using CardReaderAPI.Utility;
 
 namespace CardReaderAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Entry")]
     [ApiController]
     public class EntryController : ControllerBase
     {
@@ -23,38 +23,33 @@ namespace CardReaderAPI.Controllers
 
         // GET: api/Entry/5
         [HttpGet("{id}")]
-        public Entry Get(int id)
+        public IEnumerable<Entry> Get(int id)
         {
             return helper.Get(id);
         }
 
         // POST: api/Entry
-        [HttpPost]
-        public bool Post([FromBody] int id)
+        [HttpPost("{id}")]
+        public bool Post(int id)
         {
             User user = helper.GetUser(id);
-            Entry logEntry = new Entry();
-            if(user == null)
+            Entry logEntry;
+            if (user == null)
             {
-                logEntry.Id = id;
-                logEntry.Name = "Failed Attempt";
-                logEntry.Rank = "Failed Attempt";
-                logEntry.Time = DateTime.Now;
+                logEntry = new Entry(id, "Failed Attempt", "Failed Attempt", DateTime.Now);
                 helper.Insert(logEntry);
                 return false;
             }
-            logEntry.Id = id;
-            logEntry.Name = user.Name;
-            logEntry.Rank = user.Rank;
-            logEntry.Time = DateTime.Now;
+            logEntry = new Entry(id, user.Name, user.Rank, DateTime.Now);
             helper.Insert(logEntry);
             return true;
         }
 
         // PUT: api/Entry/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id)
         {
+            
         }
 
         // DELETE: api/ApiWithActions/5
