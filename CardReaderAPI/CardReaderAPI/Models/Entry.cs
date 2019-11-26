@@ -8,10 +8,9 @@ namespace CardReaderAPI.Models
 
         public Entry()
         {
-
         }
 
-        public Entry(string id, string name, string rank, DateTime time)
+        public Entry(int id, string name, string rank, DateTime time)
         {
             Id = id;
             Name = name;

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CardReaderAPI.Models;
+using CardReaderAPI.Utility;
 
 namespace CardReaderAPI.Controllers
 {
@@ -11,24 +13,42 @@ namespace CardReaderAPI.Controllers
     [ApiController]
     public class EntryController : ControllerBase
     {
+        EntryHelper helper = new EntryHelper();
         // GET: api/Entry
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Entry> Get()
         {
-            return new string[] { "value1", "value2" };
+            return helper.Get();
         }
 
         // GET: api/Entry/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpGet("{id}")]
+        public Entry Get(int id)
         {
-            return "value";
+            return helper.Get(id);
         }
 
         // POST: api/Entry
         [HttpPost]
-        public void Post([FromBody] string value)
+        public bool Post([FromBody] int id)
         {
+            User user = helper.GetUser(id);
+            Entry logEntry = new Entry();
+            if(user == null)
+            {
+                logEntry.Id = id;
+                logEntry.Name = "Failed Attempt";
+                logEntry.Rank = "Failed Attempt";
+                logEntry.Time = DateTime.Now;
+                helper.Insert(logEntry);
+                return false;
+            }
+            logEntry.Id = id;
+            logEntry.Name = user.Name;
+            logEntry.Rank = user.Rank;
+            logEntry.Time = DateTime.Now;
+            helper.Insert(logEntry);
+            return true;
         }
 
         // PUT: api/Entry/5
