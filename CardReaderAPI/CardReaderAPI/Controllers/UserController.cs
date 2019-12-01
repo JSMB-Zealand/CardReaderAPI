@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using CardReaderAPI.Models;
+using CardReaderAPI.Utility;
 
 namespace CardReaderAPI.Controllers
 {
@@ -13,23 +14,25 @@ namespace CardReaderAPI.Controllers
     public class UserController : ControllerBase
     {
         // GET: api/User
+        UserHelper helper = new UserHelper();
         [HttpGet]
         public IEnumerable<User> Get()
         {
-            return null;
+            return helper.GetUsers();
         }
 
         // GET: api/User/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpGet("{id}")]
+        public User Get(int id)
         {
-            return "value";
+            return helper.GetUser(id);
         }
 
         // POST: api/User
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] User value)
         {
+            helper.Insert(value);
         }
 
         // PUT: api/User/5

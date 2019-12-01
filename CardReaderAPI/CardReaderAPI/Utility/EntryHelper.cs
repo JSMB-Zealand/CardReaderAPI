@@ -7,14 +7,12 @@ using System.Threading.Tasks;
 
 namespace CardReaderAPI.Utility
 {
-    public class EntryHelper
+    public class EntryHelper:Helper
     {
         public EntryHelper()
         {
 
         }
-
-        public const string connectionString = @"Server=tcp:jsmbdbserver.database.windows.net,1433;Initial Catalog=jsmbDB;Persist Security Info=False;User ID=JSMB;Password=Zibat123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
         public IEnumerable<Entry> Get()
         {
             const string getall = @"Select * from Entry";
@@ -34,25 +32,6 @@ namespace CardReaderAPI.Utility
                 }
             }
             return list;   
-        }
-
-        public User GetUser(int id)
-        {
-            User entry = null;
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                var idstring = @"select * from Users where Id=@id";
-                using (SqlCommand cmd = new SqlCommand(idstring, connection))
-                {
-                    cmd.Parameters.AddWithValue("@id", id);
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while(reader.Read()) entry = ReadNextUser(reader);
-                    }
-                }
-            }
-            return entry;
         }
 
         public List<Entry> Get(int id)
@@ -93,25 +72,6 @@ namespace CardReaderAPI.Utility
                     cmd.ExecuteNonQuery();
                 }
             }
-        }
-
-        protected User ReadNextUser(SqlDataReader reader)
-        {
-            Entry user = new Entry();
-            user.Id = reader.GetInt32(0);
-            user.Name = reader.GetString(1);
-            user.Rank = reader.GetString(2);
-            return user;
-        }
-
-        protected Entry ReadNextEntry(SqlDataReader reader)
-        {
-            Entry entry = new Entry();
-            entry.Id = reader.GetInt32(0);
-            entry.Name = reader.GetString(1);
-            entry.Rank = reader.GetString(2);
-            entry.Time = reader.GetDateTime(3);
-            return entry;
         }
     }
 }
