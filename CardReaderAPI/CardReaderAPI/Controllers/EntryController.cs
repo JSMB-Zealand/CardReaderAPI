@@ -30,7 +30,7 @@ namespace CardReaderAPI.Controllers
 
         // POST: api/Entry
         [HttpPost("{id}")]
-        public bool Post(int id)
+        public IActionResult Post(int id)
         {
             User user = helper.GetUser(id);
             Entry logEntry;
@@ -38,11 +38,11 @@ namespace CardReaderAPI.Controllers
             {
                 logEntry = new Entry(id, "Failed Attempt", "Failed Attempt", DateTime.Now);
                 helper.Insert(logEntry);
-                return false;
+                return Unauthorized();
             }
             logEntry = new Entry(id, user.Name, user.Rank, DateTime.Now);
             helper.Insert(logEntry);
-            return true;
+            return Ok();
         }
 
         // PUT: api/Entry/5
