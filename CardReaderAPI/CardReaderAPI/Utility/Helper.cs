@@ -9,7 +9,7 @@ namespace CardReaderAPI.Utility
 {
     public abstract class Helper
     {
-        protected const string connectionString = @"Server=tcp:jsmbdbserver.database.windows.net,1433;Initial Catalog=jsmbDB;Persist Security Info=False;User ID=JSMB;Password=Zibat123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        protected const string connectionString = @"";
 
         public User GetUser(int id)
         {
