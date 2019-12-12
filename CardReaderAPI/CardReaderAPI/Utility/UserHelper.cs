@@ -1,9 +1,6 @@
 ﻿using CardReaderAPI.Models;
-using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CardReaderAPI.Utility
 {
@@ -48,6 +45,20 @@ namespace CardReaderAPI.Utility
                     cmd.Parameters.AddWithValue("@params1", user.Id);
                     cmd.Parameters.AddWithValue("@params2", user.Name);
                     cmd.Parameters.AddWithValue("@params3", user.Rank);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void Delete(string id)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var idstring = @"delete from Users where Id=@id";
+                using (SqlCommand cmd = new SqlCommand(idstring, connection))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
                     cmd.ExecuteNonQuery();
                 }
             }

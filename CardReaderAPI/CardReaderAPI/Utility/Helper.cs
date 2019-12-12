@@ -1,9 +1,5 @@
 ﻿using CardReaderAPI.Models;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CardReaderAPI.Utility
 {
@@ -11,7 +7,7 @@ namespace CardReaderAPI.Utility
     {
         protected const string connectionString = @"";
 
-        public User GetUser(int id)
+        public User GetUser(string id)
         {
             User entry = null;
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -33,7 +29,7 @@ namespace CardReaderAPI.Utility
         protected User ReadNextUser(SqlDataReader reader)
         {
             User user = new User();
-            user.Id = reader.GetInt32(0);
+            user.Id = reader.GetString(0);
             user.Name = reader.GetString(1);
             user.Rank = reader.GetString(2);
             return user;
@@ -42,7 +38,7 @@ namespace CardReaderAPI.Utility
         protected Entry ReadNextEntry(SqlDataReader reader)
         {
             Entry entry = new Entry();
-            entry.Id = reader.GetInt32(0);
+            entry.Id = reader.GetString(0);
             entry.Name = reader.GetString(1);
             entry.Rank = reader.GetString(2);
             entry.Time = reader.GetDateTime(3);

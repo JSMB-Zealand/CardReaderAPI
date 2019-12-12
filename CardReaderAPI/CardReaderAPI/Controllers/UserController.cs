@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using CardReaderAPI.Models;
 using CardReaderAPI.Utility;
@@ -23,28 +19,25 @@ namespace CardReaderAPI.Controllers
 
         // GET: api/User/5
         [HttpGet("{id}")]
-        public User Get(int id)
+        public User Get(string id)
         {
             return helper.GetUser(id);
         }
 
         // POST: api/User
         [HttpPost]
-        public void Post([FromBody] User value)
+        public IActionResult Post([FromBody] User value)
         {
+            if (Get(value.Id) != null) return Unauthorized();
             helper.Insert(value);
-        }
-
-        // PUT: api/User/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
+            return Ok();
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(string id)
         {
+            helper.Delete(id);
         }
     }
 }

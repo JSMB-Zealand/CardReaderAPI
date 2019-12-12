@@ -1,9 +1,6 @@
 ﻿using CardReaderAPI.Models;
-using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CardReaderAPI.Utility
 {
@@ -34,7 +31,7 @@ namespace CardReaderAPI.Utility
             return list;   
         }
 
-        public List<Entry> Get(int id)
+        public List<Entry> Get(string id)
         {
             List<Entry> list = new List<Entry>();
             using (SqlConnection connection = new SqlConnection(connectionString))
